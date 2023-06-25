@@ -1,0 +1,3 @@
+C:/Users/user1/Desktop/uiap4012-final-Amirali-GH/cmake-build-debug/CMakeFiles/uiap4012_final_Amirali_GH.dir
+C:/Users/user1/Desktop/uiap4012-final-Amirali-GH/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/user1/Desktop/uiap4012-final-Amirali-GH/cmake-build-debug/CMakeFiles/rebuild_cache.dir
