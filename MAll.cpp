@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <sstream>
+
 using namespace std;
 
 //======================================================================================
@@ -10,6 +12,7 @@ using namespace std;
 //======================================================================================
 //Prototypes:
 void spendTime();
+void Create_a_file_for_listing_the_products();
 
 //======================================================================================
 //Classes:
@@ -34,20 +37,47 @@ public:
 };
 class Mall_cell {
 private:
-    string username,password;
-    fstream Products;
+    string username,password,currency;
+    fstream Product_list;
 public:
     Mall_cell() {
-        Products.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Products.txt", ios::in | ios::out | ios::app);
+        Product_list.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in | ios::out | ios::app);
+        setCurrency("Rial");
     }
     ~Mall_cell() {
-        Products.close();
+        Product_list.close();
     }
+
+    void   setCurrency( string );
+    string getCurrency();
+
     void Show_product ();
     void Edit_product ();
     void Add_product  ();
-    void Exchange_rate();
+    void Exchange_rate( Mall_cell& );
+};
+class Product:Mall_cell{
+private:
+    string name;
+    int code;
+    float price;
+    int number;
 
+public:
+    Product();
+
+    //Setter and getter functions:
+    void setName(string);
+    string getName();
+    void setCode(int);
+    int getCode();
+    void setPrice(float);
+    float getPrice();
+    void setNumber(int);
+    int getNumber();
+
+    //Other functions:
+    void   Add_product();
 };
 
 //======================================================================================
@@ -55,13 +85,15 @@ public:
 int main() {
     cout << "***********    Hello my friend, Welcome to your Mall    ***********" << endl;
     cout << "\nLets go to set our initial setting and storage...\n";
+    Create_a_file_for_listing_the_products();
     spendTime();
     system("cls");
 
-
     while( true ){
+        menu:
+        system("cls");
         cout << "***********    Big Mall    ***********" << endl;
-        cout << "\n1)Manager\n2)Customer\n" << "\nWhat is your role?" ;
+        cout << "\n1)Manager\n2)Customer\n" << "\nWhat is your role? " ;
         int key;
         cin>>key;
 
@@ -97,20 +129,44 @@ int main() {
                 //Entered as Manager:
                 while( true ){
                     Mall_cell Manager;
-
+                    system("cls");
+                    cout << "***********    Big Mall ( Manager )    ***********" << endl;
+                    cout << "\n1)Show product\n2)Edit products\n3)Add_product\n4)Exchange_rate\n5)Exit" << "\nWhat do you want to do? " ;
+                    int duty;
+                    cin>>duty;
+                    system("cls");
+                    switch (duty) {
+                        case 1:
+                            Manager.Show_product ();
+                            break;
+                        case 2:
+                            Manager.Edit_product ();
+                            break;
+                        case 3:
+                            Manager.Add_product  ();
+                            break;
+                        case 4:
+                            Manager.Exchange_rate( Manager );
+                            break;
+                        case 5:
+                            goto menu;
+                            break;
+                        default:
+                            continue;
+                    }
                 }
             }
         }
 
+        //Entered as Manager:
         else if( key == 2 ){
             int key_customer=1;
             while( key_customer ){
                 Mall_shop user1;
                 user1.addUser();
-
             }
         }
-
+        //Wrong answer and it must enter again.
         else{
             system("cls");
             cout << "Choose 1 (Manager) or 2 (Customer)" << endl;
@@ -126,9 +182,15 @@ int main() {
 void spendTime() {
     for (int i = 0; i < 1000000000; i++){}
 }
+void Create_a_file_for_listing_the_products(){
+    fstream Product_list;
+    Product_list.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in | ios::out | ios::app);
+    Product_list << "Name" << ","  << "Code" << ","  << "Price"<< "," << "Currency" << ","  << "Number" << endl;
+    Product_list.close();
+}
 
 //======================================================================================
-//Function of class:
+//Function of class of Mall_shop:
 void Mall_shop::readUsers() {
     string username, password;
     while (users_file >> username >> password) {
@@ -201,5 +263,147 @@ void Mall_shop::addUser() {
     cout << "Account created successfully!" << endl;
 }
 
+//======================================================================================
+//Function of class of Mall_cell:
+void Mall_cell::Show_product() {
+    fstream Product_list("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in);
+    system("cls");
+    string line;
+    while (getline(Product_list, line)) {
+        stringstream ss(line);
+        string temp;
+        for (int i = 0; i < 4; i++) {
+            getline(ss, temp, ',');
+            cout << temp << "           ";
+        }
+        cout << endl;
+    }
+    Product_list.close();
+    string exit;
+    cout << "\nIf you want to quit, type ( Exit ) : ";
+    cin >> exit;
+    if (exit == "Exit")
+        system("cls");
+}
+void Mall_cell::Edit_product  (){
+    Product pro;
+    cout << "***********    Big Mall ( Manager _ Add product )    ***********" << endl;
+    cout << "\nName of product : "   ;
+    string na; cin>>na;
+    pro.setName( na );
+
+    cout << "\nCode of product : "   ;
+    int co; cin>>co;
+    pro.setCode( co );
+
+    cout << "\nPrice of product : "  ;
+    float pr; cin>>pr;
+    pro.setPrice( pr );
+
+    cout << "\nNumber of product : " ;
+    int nu; cin>>nu;
+    pro.setNumber( nu );
+}
+void Mall_cell::Add_product   (){
+    Product pro;
+    cout << "***********    Big Mall ( Manager _ Add product )    ***********" << endl;
+    cout << "\nName of product : "   ;
+    string na; cin>>na;
+    pro.setName( na );
+
+    cout << "\nCode of product : "   ;
+    int co; cin>>co;
+    pro.setCode( co );
+
+    cout << "\nPrice of product ("<< getCurrency() <<") : "  ;
+    float pr; cin>>pr;
+    pro.setPrice( pr );
+
+    cout << "\nNumber of product : " ;
+    int nu; cin>>nu;
+    pro.setNumber( nu );
+
+    fstream product_file;
+    product_file.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\"+na+".txt", ios::in | ios::out | ios::app) ;
+    Product_list << na << ","  << co << ","  << pr << ","  << getCurrency() << ","  << nu <<endl   ;
+    product_file << na << endl << co << endl << pr << endl << getCurrency() << endl << nu <<endl   ;
+    product_file.close();
+    Product_list.close();
+}
+void Mall_cell::Exchange_rate ( Mall_cell& Manager ){
+    while(true){
+        menuOfExchangeRate:
+        system("cls");
+        cout << "***********    Big Mall ( Manager _ Exchange_rate )    ***********" << endl;
+        cout << "\n1)Rial\n2)Dollar\n3)Euro\n4)Exit" << "\nWhat currency to change?" ;
+        int key; cin>>key;
+        switch (key) {
+            case 1:
+                Manager.setCurrency("Rial");
+                system("cls");
+                cout << "Currency successfuly chaged !" << endl;
+                void spendTime();void spendTime();
+                break;
+            case 2:
+                Manager.setCurrency("Dollar");
+                system("cls");
+                cout << "Currency successfuly chaged !" << endl;
+                void spendTime();void spendTime();
+                break;
+            case 3:
+                Manager.setCurrency("Euro");
+                system("cls");
+                cout << "Currency successfuly chaged !" << endl;
+                void spendTime();void spendTime();
+                break;
+            case 4:
+                goto menuOfExchangeRate;
+            default:
+                continue;
+        }
+        break;
+    }
+}
+
+void   Mall_cell::setCurrency( string cu ){
+    this->currency = cu;
+}
+string Mall_cell::getCurrency(){
+    return this->currency;
+}
+
+//======================================================================================
+//Function of class of Product:
+Product::Product(){
+    setCode   (0000);
+    setName   ("BigMall");
+    setNumber (0);
+    setPrice  (0);
+}
+
+void   Product::setName        ( string na ){
+    this->name = na;
+}
+string Product::getName        (){
+    return  this->name;
+}
+void   Product::setCode        ( int co ){
+    this->code = co;
+}
+int    Product::getCode        (){
+    return  this->code;
+}
+void   Product::setPrice       ( float pr ){
+    this->price = pr;
+}
+float  Product::getPrice       (){
+    return  this->price;
+}
+void   Product::setNumber      ( int nu ){
+    this->number = nu;
+}
+int    Product::getNumber      (){
+    return  this->number;
+}
 
 
