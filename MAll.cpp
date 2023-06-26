@@ -42,7 +42,7 @@ private:
 public:
     Mall_cell() {
         Product_list.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in | ios::out | ios::app);
-        setCurrency("Rial");
+        setCurrency("Dollar");
     }
     ~Mall_cell() {
         Product_list.close();
@@ -265,14 +265,14 @@ void Mall_shop::addUser() {
 
 //======================================================================================
 //Function of class of Mall_cell:
-void Mall_cell::Show_product() {
+void Mall_cell::Show_product  (){
     fstream Product_list("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in);
     system("cls");
     string line;
     while (getline(Product_list, line)) {
         stringstream ss(line);
         string temp;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             getline(ss, temp, ',');
             cout << temp << "           ";
         }
@@ -330,31 +330,32 @@ void Mall_cell::Add_product   (){
     product_file.close();
     Product_list.close();
 }
-void Mall_cell::Exchange_rate ( Mall_cell& Manager ){
-    while(true){
+void Mall_cell::Exchange_rate(Mall_cell& Manager) {
+    while (true) {
         menuOfExchangeRate:
         system("cls");
         cout << "***********    Big Mall ( Manager _ Exchange_rate )    ***********" << endl;
-        cout << "\n1)Rial\n2)Dollar\n3)Euro\n4)Exit" << "\nWhat currency to change?" ;
-        int key; cin>>key;
+        cout << "\n1)Rial\n2)Dollar\n3)Euro\n4)Exit" << "\nWhat currency to change?";
+        int key;
+        cin >> key;
         switch (key) {
             case 1:
                 Manager.setCurrency("Rial");
                 system("cls");
-                cout << "Currency successfuly chaged !" << endl;
-                void spendTime();void spendTime();
+                cout << "Currency successfully changed!" << endl;
+                spendTime();
                 break;
             case 2:
                 Manager.setCurrency("Dollar");
                 system("cls");
-                cout << "Currency successfuly chaged !" << endl;
-                void spendTime();void spendTime();
+                cout << "Currency successfully changed!" << endl;
+                spendTime();
                 break;
             case 3:
                 Manager.setCurrency("Euro");
                 system("cls");
-                cout << "Currency successfuly chaged !" << endl;
-                void spendTime();void spendTime();
+                cout << "Currency successfully changed!" << endl;
+                spendTime();
                 break;
             case 4:
                 goto menuOfExchangeRate;
@@ -363,6 +364,47 @@ void Mall_cell::Exchange_rate ( Mall_cell& Manager ){
         }
         break;
     }
+
+    // Get lines for modifier:
+    fstream Product_list;
+    Product_list.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in);
+    vector<vector<string>> outputs;
+    string temp;
+    int i = 0;
+    if (Product_list.is_open()) {
+        while (std::getline(Product_list, temp)) {
+            if (i == 0) {  // Skip header line
+                i++;
+                continue;
+            }
+            vector<string> tokens;
+            stringstream ss(temp);
+            string token;
+            while (std::getline(ss, token, ',')) {
+                tokens.push_back(token);
+            }
+            tokens[3] = Manager.getCurrency(); // Fix the column name
+            outputs.push_back(tokens);
+            i++;
+        }
+    }
+    Product_list.close();
+
+    // Write again the lines:
+    Product_list.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::out | ios::trunc);
+    if (Product_list.is_open()) {
+        Product_list << "Code,Name,Price,Currency,Number" << endl; // Fix the column name
+        for (int j = 0; j < outputs.size(); ++j) {
+            for (int k = 0; k < outputs[j].size(); ++k) {
+                Product_list << outputs[j][k];
+                if (k != outputs[j].size() - 1) {
+                    Product_list << ",";
+                }
+            }
+            Product_list << endl;
+        }
+    }
+    Product_list.close();
 }
 
 void   Mall_cell::setCurrency( string cu ){
@@ -405,5 +447,3 @@ void   Product::setNumber      ( int nu ){
 int    Product::getNumber      (){
     return  this->number;
 }
-
-

@@ -22,7 +22,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAll.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/MAll.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAll.exe" beforeDir="false" afterPath="$PROJECT_DIR$/MAll.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Products.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Product_files/Product_list.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Product_files/Product_list.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +101,7 @@
       <workItem from="1687625342814" duration="3379000" />
       <workItem from="1687675123040" duration="4016000" />
       <workItem from="1687694518796" duration="3916000" />
-      <workItem from="1687698771439" duration="13117000" />
+      <workItem from="1687698771439" duration="18584000" />
     </task>
     <task id="LOCAL-00001" summary="Start the programing">
       <created>1687625952997</created>
