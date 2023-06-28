@@ -1,4 +1,5 @@
 Code,Name,Price,Currency,Number
-Milk,1,260000,Rial,60
-Cake,2,120000,Rial,90
-Orange,3,300000,Rial,60
+Milk,1,0.780000,Euro,60
+Cake,2,0.156000,Euro,90
+Orange,3,0.468000,Euro,60
+Cookie,4,0.312000,Euro,52

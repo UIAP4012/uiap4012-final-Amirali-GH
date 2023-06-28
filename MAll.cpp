@@ -3,7 +3,6 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-
 using namespace std;
 
 //======================================================================================
@@ -12,7 +11,6 @@ using namespace std;
 //======================================================================================
 //Prototypes:
 void spendTime();
-void Create_a_file_for_listing_the_products();
 
 //======================================================================================
 //Classes:
@@ -41,8 +39,29 @@ private:
     fstream Product_list;
 public:
     Mall_cell() {
-        Product_list.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in | ios::out | ios::app);
-        setCurrency("Dollar");
+        // Get lines for modify the Currency:
+        Product_list.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in);
+        vector<vector<string>> outputs;
+        string temp;
+        int i = 0;
+        if (Product_list.is_open()) {
+            while (std::getline(Product_list, temp)) {
+                if (i == 0) {  // Skip header line
+                    i++;
+                    continue;
+                }
+                vector<string> tokens;
+                stringstream ss(temp);
+                string token;
+                while (std::getline(ss, token, ',')) {
+                    tokens.push_back(token);
+                }
+                setCurrency(tokens[3]); // Fix the column name
+                outputs.push_back(tokens);
+                i++;
+            }
+        }
+        Product_list.close();
     }
     ~Mall_cell() {
         Product_list.close();
@@ -85,7 +104,6 @@ public:
 int main() {
     cout << "***********    Hello my friend, Welcome to your Mall    ***********" << endl;
     cout << "\nLets go to set our initial setting and storage...\n";
-    Create_a_file_for_listing_the_products();
     spendTime();
     system("cls");
 
@@ -182,12 +200,6 @@ int main() {
 void spendTime() {
     for (int i = 0; i < 1000000000; i++){}
 }
-void Create_a_file_for_listing_the_products(){
-    fstream Product_list;
-    Product_list.open("C:\\Users\\user1\\Desktop\\uiap4012-final-Amirali-GH\\Product_files\\Product_list.csv", ios::in | ios::out | ios::app);
-    Product_list << "Name" << ","  << "Code" << ","  << "Price"<< "," << "Currency" << ","  << "Number" << endl;
-    Product_list.close();
-}
 
 //======================================================================================
 //Function of class of Mall_shop:
@@ -274,7 +286,7 @@ void Mall_cell::Show_product  (){
         string temp;
         for (int i = 0; i < 5; i++) {
             getline(ss, temp, ',');
-            cout << temp << "           ";
+            cout << temp << "\t\t\t";
         }
         cout << endl;
     }
@@ -383,6 +395,33 @@ void Mall_cell::Exchange_rate(Mall_cell& Manager) {
             while (std::getline(ss, token, ',')) {
                 tokens.push_back(token);
             }
+            if( tokens[3] != Manager.getCurrency() ){
+                if ( Manager.getCurrency() == "Rial" ) {
+                    if ( tokens[3] == "Dollar" ) {
+                        tokens[2] = to_string(stof(tokens[2]) * 500000);
+                    }
+                    else if ( tokens[3] == "Euro" ) {
+                        tokens[2] = to_string(stof(tokens[2]) * 650000);
+                    }
+                }
+                else if ( Manager.getCurrency() == "Dollar" ) {
+                    if ( tokens[3] == "Rial" ) {
+                        tokens[2] = to_string(stof(tokens[2]) / 500000);
+                    }
+                    else if ( tokens[3] == "Euro" ) {
+                        tokens[2] = to_string(stof(tokens[2]) / 1.2);
+                    }
+                }
+                else if ( Manager.getCurrency() == "Euro" ) {
+                    if ( tokens[3] == "Rial" ) {
+                        tokens[2] = to_string(stof(tokens[2]) / 650000);
+                    }
+                    else if ( tokens[3] == "Dollar" ) {
+                        tokens[2] = to_string(stof(tokens[2]) * 1.2);
+                    }
+                }
+            }
+            cout<<tokens[2];
             tokens[3] = Manager.getCurrency(); // Fix the column name
             outputs.push_back(tokens);
             i++;
